@@ -1,0 +1,29 @@
+name: Build For Web
+
+on:
+  workflow_dispatch
+
+jobs:
+
+  build:
+    runs-on: windows-latest
+    steps:
+    - name: Check out Git repository
+        uses: actions/checkout@v4
+        with:
+          submodules: "recursive"
+
+    - name: Install Node.js, NPM and Yarn
+        uses: actions/setup-node@v3
+        with:
+          node-version: 16
+          cache: 'yarn'
+
+    - name: Build
+      run: yarn install && yarn run build
+
+    - name: Upload
+      uses: actions/upload-artifact@v4
+      with:
+        name: web-page
+        path: dist
